@@ -7,30 +7,56 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MyRestaurant
+namespace MyCart
 {
     public partial class Form1 : Form
     {
-        IRestaurant myRestaurant = new Restaurant();
 
-        public Form1()
+        ICart cartMeat = new CartMeat();
+        ICart cartFruit = new CartFruit();
+
+        public Form1() => InitializeComponent();
+
+        private void Meat_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
-            
+            Button btn = (Button)sender;
+            IItem item = new Meat(btn.Text);
+            cartMeat.AddCart(item);
+            ShowCrat(labelMeat, cartMeat.GetCartText);
         }
 
-        private void 排骨飯_Click(object sender, EventArgs e)
+        private void Fruit_Click(object sender, EventArgs e)
         {
-            IItem item = new Item(((Button)sender).Text, int.Parse(排骨飯價錢.Text));
-            myRestaurant.Menu.Add(item);
+            Button btn = (Button)sender;
+            IItem item = new Fruit(btn.Text);
+            cartFruit.AddCart(item);
+            ShowCrat(labelFruit, cartFruit.GetCartText);
         }
 
-        public void ShowMenu() 
+        private void 結帳_Click(object sender, EventArgs e)
         {
-            foreach (IItem item in myRestaurant.Menu) 
-            {
-                餐廳1菜單.Text += string.Format("{0} {1}元\r\n",item.Name,item.Price);
-            }
+            ShowTotalPrice(cartMeat, cartMeat, cartMeat.GetTotlePriceText, cartFruit.GetTotlePriceText);
+        }
+
+        public void ShowCrat(Label label, Func<string> getcarttext)
+        {
+            label.Text = getcarttext();
+        }
+
+        public void ShowTotalPrice(ICart cartmeat, ICart cartfruit, Func<string> getmeatcartpricetext, Func<string> getfruitcartpricetext)
+        {
+
+
+            labelTotalPrice.Text = $"{getmeatcartpricetext()}{getfruitcartpricetext()}";
+        }
+
+        private void btnAllClear_Click(object sender, EventArgs e)
+        {
+            labelMeat.Text = "";
+            labelFruit.Text = "";
+            labelTotalPrice.Text = "";
+            cartMeat.ClearCart();
+            cartFruit.ClearCart();
         }
     }
 }

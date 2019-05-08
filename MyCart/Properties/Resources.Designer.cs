@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MyRestaurant.Properties {
+namespace MyCart.Properties {
     using System;
     
     
